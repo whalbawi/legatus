@@ -1,11 +1,11 @@
-#ifndef SKELETON_SKELETON_H_
-#define SKELETON_SKELETON_H_
+#ifndef LEGATUS_LEGATUS_H_
+#define LEGATUS_LEGATUS_H_
 
 #include <string>
 
-namespace skeleton {
+namespace legatus {
 
-class Skeleton {
+class Legatus {
   public:
     static std::string get_version();
 
@@ -16,6 +16,6 @@ class Skeleton {
     int result;
 };
 
-} // namespace skeleton
+} // namespace legatus
 
-#endif // SKELETON_SKELETON_H_
+#endif // LEGATUS_LEGATUS_H_

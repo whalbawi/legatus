@@ -1,23 +1,23 @@
-#ifndef SKELETON_VERSION_H_
-#define SKELETON_VERSION_H_
+#ifndef LEGATUS_VERSION_H_
+#define LEGATUS_VERSION_H_
 
-namespace skeleton {
+namespace legatus {
 
 namespace {
 
-#cmakedefine SKELETON_PROJECT_VERSION "@SKELETON_PROJECT_VERSION@"
-#cmakedefine SKELETON_GIT_COMMIT_HASH "@SKELETON_GIT_COMMIT_HASH@"
+#cmakedefine LEGATUS_PROJECT_VERSION "@LEGATUS_PROJECT_VERSION@"
+#cmakedefine LEGATUS_GIT_COMMIT_HASH "@LEGATUS_GIT_COMMIT_HASH@"
 
 } // namespace
 
 std::string version() {
-    return SKELETON_PROJECT_VERSION;
+    return LEGATUS_PROJECT_VERSION;
 }
 
 std::string git_commit_hash() {
-    return SKELETON_GIT_COMMIT_HASH;
+    return LEGATUS_GIT_COMMIT_HASH;
 }
 
-} // namespace skeleton
+} // namespace legatus
 
-#endif // SKELETON_VERSION_H_
+#endif // LEGATUS_VERSION_H_
