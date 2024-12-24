@@ -1,5 +1,7 @@
 #include "legatus.h"
 
+#include <string>
+
 #include "version.h"
 
 namespace legatus {
@@ -9,11 +11,11 @@ std::string Legatus::get_version() {
 }
 
 void Legatus::add(int a, int b) {
-    result = a + b;
+    result_ = a + b;
 }
 
 int Legatus::get_result() const {
-    return result;
+    return result_;
 }
 
 } // namespace legatus

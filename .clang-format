@@ -11,3 +11,10 @@ AllowShortLoopsOnASingleLine: true
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 BinPackArguments: false
 BinPackParameters: false
+BreakAfterReturnType: Automatic
+PenaltyReturnTypeOnItsOwnLine: 1000
+
+AlwaysBreakTemplateDeclarations: Yes
+
+InsertNewlineAtEOF: true
+
