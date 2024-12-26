@@ -1,5 +1,4 @@
-#ifndef LEGATUS_LEGATUS_H_
-#define LEGATUS_LEGATUS_H_
+#pragma once
 
 #include <string>
 
@@ -13,9 +12,7 @@ class Legatus {
     int get_result() const;
 
   private:
-    int result;
+    int result_;
 };
 
 } // namespace legatus
-
-#endif // LEGATUS_LEGATUS_H_

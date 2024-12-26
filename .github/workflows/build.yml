@@ -1,17 +1,60 @@
-name: build
+name: Legatus CI
 
 on:
   push:
     branches: [ master ]
   pull_request:
-    branches: [ master ]
+    branches: [ * ]
 
 jobs:
+  format:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        submodules: recursive
+
+    - name: Setup environment
+      run: ./tools/install-deps.sh
+
+    - name: Run clang-format
+      run: |
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE_COMMIT=${{ github.event.pull_request.base.sha }}
+            THIS_COMMIT=${{ github.event.pull_request.head.sha }}
+            git clang-format --diff $BASE_COMMIT $THIS_COMMIT
+        else
+            git clang-format --diff HEAD^
+        fi
+
+  lint:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Setup environment
+      run: ./tools/install-deps.sh
+
+    - name: Configure CMake
+      run: cmake -B ${{github.workspace}}/build
+
+    - name: Run clang-tidy
+      run: cmake --build ${{github.workspace}}/build -t lint
+
   build:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
-        os: [ ubuntu-latest, macos-latest ]
+        os: [ macos-latest ]
+        build_type:
+          - -DENABLE_MSAN=ON
+          - -DENABLE_UBSAN=ON
+          - -DCMAKE_BUILD_TYPE=Release
 
     steps:
     - uses: actions/checkout@v2
@@ -19,7 +62,7 @@ jobs:
         submodules: recursive
 
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build
+      run: cmake -B ${{github.workspace}}/build ${{ matrix.build_options }}
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build
