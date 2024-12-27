@@ -1,12 +1,15 @@
-#ifndef LEGATUS_VERSION_H_
-#define LEGATUS_VERSION_H_
+#include "version.h"
+
+#include <string>
 
 namespace legatus {
 
 namespace {
 
+// NOLINTBEGIN(cppcoreguidelines-macro-usage)
 #cmakedefine LEGATUS_PROJECT_VERSION "@LEGATUS_PROJECT_VERSION@"
 #cmakedefine LEGATUS_GIT_COMMIT_HASH "@LEGATUS_GIT_COMMIT_HASH@"
+// NOLINTEND(cppcoreguidelines-macro-usage)
 
 } // namespace
 
@@ -19,5 +22,3 @@ std::string git_commit_hash() {
 }
 
 } // namespace legatus
-
-#endif // LEGATUS_VERSION_H_
