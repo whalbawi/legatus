@@ -4,12 +4,12 @@
 
 class LegatusTest : public ::testing::Test {
   protected:
-    legatus::Legatus legatus{};
+    legatus::Legatus legatus_{};
 };
 
 TEST_F(LegatusTest, Adder) {
-    legatus.add(1, 2);
-    ASSERT_EQ(legatus.get_result(), 3);
+    legatus_.add(1, 2);
+    ASSERT_EQ(legatus_.get_result(), 3);
 }
 
 TEST_F(LegatusTest, Version) {

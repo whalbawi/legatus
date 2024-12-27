@@ -11,3 +11,30 @@ AllowShortLoopsOnASingleLine: true
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 BinPackArguments: false
 BinPackParameters: false
+BreakAfterReturnType: Automatic
+PenaltyReturnTypeOnItsOwnLine: 1000
+
+AlwaysBreakTemplateDeclarations: Yes
+
+InsertNewlineAtEOF: true
+
+IncludeIsMainRegex: "(_test)?$"
+IncludeBlocks: Regroup
+SortIncludes: true
+IncludeCategories:
+  - Regex:           '^<[a-z]+\.h>'       # <unistd.h>
+    Priority:        1
+  - Regex:           '^<[a-z]+/.*\.h>'    # <sys/event.h>
+    Priority:        1
+  - Regex:           '^<c(string|std).*>' # <cstring>
+    Priority:        2
+  - Regex:           '^<[^/]*>'           # <other>
+    Priority:        3
+  - Regex:           '^<.*/'              # <a/other>
+    Priority:        3
+  - Regex:           '^"gtest/.*"'        # "gtest/gtest.h"
+    Priority:        5
+  - Regex:           '^".*/'              # "b/project"
+    Priority:        4
+  - Regex:           '^".*"'              # "project"
+    Priority:        4
