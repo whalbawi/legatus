@@ -10,5 +10,6 @@ else
     exit 1
 fi
 
+install-clang
 install-clang-format
 install-clang-tidy
