@@ -4,6 +4,8 @@
 
 #include <cstdint>
 
+#include "legatus/status.h"
+
 #include "gtest/gtest.h"
 
 namespace legatus::io {
@@ -19,11 +21,12 @@ TEST(EventLoopTest, TimerOneshot) {
 
         called = true;
 
-        ev_loop.shutdown();
+        const Status<None, int> res = ev_loop.shutdown();
+        ASSERT_TRUE(res.is_ok());
     };
 
-    const int res = ev_loop.register_timer(timer_id, delay, false /* periodic */, cb);
-    ASSERT_EQ(0, res);
+    const Status<None, int> res = ev_loop.register_timer(timer_id, delay, false /* periodic */, cb);
+    ASSERT_TRUE(res.is_ok());
 
     ev_loop.run();
 
@@ -44,12 +47,13 @@ TEST(EventLoopTest, TimerPeriodic) {
         ++counter;
 
         if (counter == counter_max) {
-            ev_loop.shutdown();
+            const Status<None, int> res = ev_loop.shutdown();
+            ASSERT_TRUE(res.is_ok());
         }
     };
 
-    const int res = ev_loop.register_timer(timer_id, delay, true /* periodic */, cb);
-    ASSERT_EQ(0, res);
+    const Status<None, int> res = ev_loop.register_timer(timer_id, delay, true /* periodic */, cb);
+    ASSERT_TRUE(res.is_ok());
 
     ev_loop.run();
 
@@ -70,7 +74,8 @@ TEST(EventLoopTest, TimerUpdate) {
 
         called = true;
 
-        ev_loop.shutdown();
+        const Status<None, int> res = ev_loop.shutdown();
+        ASSERT_TRUE(res.is_ok());
     };
 
     const TimerCallback cb_periodic = [&](uint64_t id, int64_t err) {
@@ -78,13 +83,15 @@ TEST(EventLoopTest, TimerUpdate) {
         ASSERT_EQ(0, err);
         ++counter;
         if (counter == counter_max) {
-            const int res = ev_loop.register_timer(id, delay, false /* periodic */, cb_oneshot);
-            ASSERT_EQ(0, res);
+            const Status<None, int> res =
+                ev_loop.register_timer(id, delay, false /* periodic */, cb_oneshot);
+            ASSERT_TRUE(res.is_ok());
         }
     };
 
-    const int res = ev_loop.register_timer(timer_id, delay, true /* periodic */, cb_periodic);
-    ASSERT_EQ(0, res);
+    const Status<None, int> res =
+        ev_loop.register_timer(timer_id, delay, true /* periodic */, cb_periodic);
+    ASSERT_TRUE(res.is_ok());
 
     ev_loop.run();
 

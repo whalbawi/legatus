@@ -26,7 +26,7 @@ IncludeCategories:
     Priority:        1
   - Regex:           '^<[a-z]+/.*\.h>'    # <sys/event.h>
     Priority:        1
-  - Regex:           '^<c(string|std).*>' # <cstring>
+  - Regex:           '^<c(errno|string|std).*>' # <cstring>
     Priority:        2
   - Regex:           '^<[^/]*>'           # <other>
     Priority:        3

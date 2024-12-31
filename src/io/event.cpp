@@ -3,10 +3,13 @@
 #include <sys/event.h>
 #include <unistd.h>
 
+#include <cerrno>
 #include <cstdint>
 #include <cstdio>
 
 #include <stdexcept>
+
+#include "legatus/status.h"
 
 namespace legatus::io {
 
@@ -31,27 +34,38 @@ EventLoop::~EventLoop() {
     }
 }
 
-int EventLoop::register_timer(uint64_t id,
-                              uint64_t timeout,
-                              bool periodic,
-                              const TimerCallback& cb) {
+Status<None, int> EventLoop::register_timer(uint64_t id,
+                                            uint64_t timeout,
+                                            bool periodic,
+                                            const TimerCallback& cb) {
     struct kevent ev{};
     const uint16_t oneshot = periodic ? 0 : EV_ONESHOT;
 
     EV_SET(&ev, id, EVFILT_TIMER, EV_ADD | oneshot, NOTE_NSECONDS, timeout, nullptr);
     timers_[id] = cb;
 
-    return kevent(kq_, &ev, 1, nullptr, 0, nullptr);
+    const int ret = kevent(kq_, &ev, 1, nullptr, 0, nullptr);
+    if (ret == -1) {
+        perror("failed to register timer");
+
+        return Status<None, int>::make_err(errno);
+    };
+
+    return Status<None, int>::make_ok();
 }
 
-void EventLoop::shutdown() const {
+Status<None, int> EventLoop::shutdown() const {
     struct kevent ev{};
     EV_SET(&ev, k_shutdown_event_id, EVFILT_USER, 0, NOTE_TRIGGER, 0, nullptr);
 
     const int ret = kevent(kq_, &ev, 1, nullptr, 0, nullptr);
     if (ret == -1) {
         perror("failed to schedule shutdown event");
+
+        return Status<None, int>::make_err(errno);
     }
+
+    return Status<None, int>::make_ok();
 }
 
 void EventLoop::run() {
