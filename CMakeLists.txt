@@ -84,6 +84,7 @@ set(LEGATUS_SRC_LIST
 # Test files
 set(LEGATUS_TEST_LIST
     ${LEGATUS_TEST_DIR}/legatus_test.cpp
+    ${LEGATUS_TEST_DIR}/status_test.cpp
     ${LEGATUS_TEST_DIR}/io/event_test.cpp
 )
 

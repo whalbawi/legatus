@@ -7,6 +7,8 @@
 #include <functional>
 #include <unordered_map>
 
+#include "legatus/status.h"
+
 namespace legatus::io {
 
 using TimerCallback = std::function<void(uint64_t, int64_t)>;
@@ -21,9 +23,12 @@ class EventLoop {
 
     ~EventLoop();
 
-    void shutdown() const;
+    Status<None, int> shutdown() const;
 
-    int register_timer(uint64_t id, uint64_t timeout, bool periodic, const TimerCallback& cb);
+    Status<None, int> register_timer(uint64_t id,
+                                     uint64_t timeout,
+                                     bool periodic,
+                                     const TimerCallback& cb);
 
     void run();
 
