@@ -3,7 +3,6 @@
 #include <cstdint>
 
 #include <memory>
-#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -16,18 +15,16 @@ TEST(StatusTest, Ok) {
     Status status = Status<int, int>::make_ok(-2);
 
     ASSERT_TRUE(status.is_ok());
-    ASSERT_EQ(std::optional<int>(-2), status.ok());
+    ASSERT_EQ(-2, status.ok());
     ASSERT_FALSE(status.is_err());
-    ASSERT_EQ(std::nullopt, status.err());
 }
 
 TEST(StatusTest, Error) {
     Status status = Status<int, std::string>::make_err("error message");
 
     ASSERT_TRUE(status.is_err());
-    ASSERT_EQ(std::optional<std::string>("error message"), status.err());
+    ASSERT_EQ(std::string("error message"), status.err());
     ASSERT_FALSE(status.is_ok());
-    ASSERT_EQ(std::nullopt, status.ok());
 }
 
 template <typename T>
@@ -50,13 +47,10 @@ TEST(StatusTest, ComplexOk) {
 
     ASSERT_TRUE(status.is_ok());
     ASSERT_FALSE(status.is_err());
-    ASSERT_EQ(std::nullopt, status.err());
 
-    std::optional<ComplexResult<int>> ok_val = status.ok();
-    ASSERT_TRUE(ok_val.has_value());
-    const ComplexResult<int>& val = ok_val.value(); // NOLINT(bugprone-unchecked-optional-access)
-    ASSERT_EQ(result_expected, *val.result);
-    ASSERT_EQ(payload, val.payload);
+    const ComplexResult<int> cplx_res = status.ok();
+    ASSERT_EQ(result_expected, *cplx_res.result);
+    ASSERT_EQ(payload, cplx_res.payload);
 }
 
 TEST(StatusTest, ComplexError) {
@@ -66,32 +60,26 @@ TEST(StatusTest, ComplexError) {
 
     ASSERT_TRUE(status.is_err());
     ASSERT_FALSE(status.is_ok());
-    ASSERT_EQ(std::nullopt, status.ok());
 
-    std::optional<ComplexResult<ErrorCode>> err_val = status.err();
-    ASSERT_TRUE(err_val.has_value());
-    const ComplexResult<ErrorCode>& val =
-        err_val.value(); // NOLINT(bugprone-unchecked-optional-access)
-    ASSERT_EQ(ErrorCode::INVALID, *val.result);
-    ASSERT_EQ(payload, val.payload);
+    const ComplexResult<ErrorCode> cplx_res = status.err();
+    ASSERT_EQ(ErrorCode::INVALID, *cplx_res.result);
+    ASSERT_EQ(payload, cplx_res.payload);
 }
 
 TEST(StatusTest, NoneOk) {
     Status status = Status<None, int>::make_ok();
 
     ASSERT_TRUE(status.is_ok());
-    ASSERT_EQ(std::optional<None>({}), status.ok());
+    ASSERT_EQ(None{}, status.ok());
     ASSERT_FALSE(status.is_err());
-    ASSERT_EQ(std::nullopt, status.err());
 }
 
 TEST(StatusTest, NoneErr) {
     Status status = Status<int>::make_err();
 
     ASSERT_TRUE(status.is_err());
-    ASSERT_EQ(std::optional<None>({}), status.err());
+    ASSERT_EQ(None{}, status.err());
     ASSERT_FALSE(status.is_ok());
-    ASSERT_EQ(std::nullopt, status.ok());
 }
 
 } // namespace legatus

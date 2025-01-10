@@ -33,9 +33,7 @@ if(ENABLE_MSAN)
         )
         add_link_options(-fsanitize=address)
     else()
-        add_compile_options(
-            -fsanitize=memory
-            -fno-omit-frame-pointer
+        add_compile_options( -fsanitize=memory -fno-omit-frame-pointer
             -g
         )
         add_link_options(-fsanitize=memory)
@@ -78,6 +76,7 @@ configure_file(${LEGATUS_SRC_DIR}/version.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/gen
 set(LEGATUS_SRC_LIST
     ${LEGATUS_SRC_DIR}/legatus.cpp
     ${LEGATUS_SRC_DIR}/io/event.cpp
+    ${LEGATUS_SRC_DIR}/io/socket.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/gen/version.cpp
 )
 
@@ -98,7 +97,9 @@ target_link_libraries(legatus-tests legatus-lib gtest_main)
 
 add_test(unit-tests legatus-tests)
 
+file(GLOB_RECURSE HDR_FILES "${LEGATUS_SRC_DIR}/*.h" "${LEGATUS_INCLUDE_DIR}/*.h")
 add_custom_target(lint
-  COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/tools/run-clang-tidy.py -p=${CMAKE_BINARY_DIR} -config-file=${CMAKE_SOURCE_DIR}/.clang-tidy
+  COMMAND /usr/local/bin/clang-tidy -p ${CMAKE_BINARY_DIR} --config-file ${CMAKE_CURRENT_SOURCE_DIR}/.clang-tidy ${HDR_FILES}
+  COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/tools/run-clang-tidy.py -p=${CMAKE_BINARY_DIR} -config-file=${CMAKE_CURRENT_SOURCE_DIR}/.clang-tidy
   COMMENT "Running clang-tidy..."
 )

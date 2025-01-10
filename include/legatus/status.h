@@ -1,6 +1,8 @@
 #pragma once
 
-#include <optional>
+#include <cstdint>
+
+#include <utility>
 #include <variant>
 
 namespace legatus {
@@ -26,9 +28,9 @@ class Status {
 
     bool is_err() const;
 
-    std::optional<T> ok();
+    T ok();
 
-    std::optional<E> err();
+    E err();
 
   private:
     Status() = delete;
@@ -78,13 +80,13 @@ bool Status<T, E>::is_err() const {
 }
 
 template <typename T, typename E>
-std::optional<T> Status<T, E>::ok() {
-    return is_ok() ? std::optional<T>(std::move(std::get<0>(state_))) : std::nullopt;
+T Status<T, E>::ok() {
+    return std::move(std::get<0>(state_));
 }
 
 template <typename T, typename E>
-std::optional<E> Status<T, E>::err() {
-    return is_err() ? std::optional<E>(std::move(std::get<1>(state_))) : std::nullopt;
+E Status<T, E>::err() {
+    return std::move(std::get<1>(state_));
 }
 
 } // namespace legatus
