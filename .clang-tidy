@@ -9,7 +9,7 @@ Checks: >
   -bugprone-easily-swappable-parameters,
   -readability-identifier-length
 
-HeaderFilterRegex: '.*'
+HeaderFilterRegex: "(src|include)/.*"
 WarningsAsErrors: "*"
 
 CheckOptions:
@@ -25,11 +25,12 @@ CheckOptions:
  - { key: readability-identifier-naming.EnumConstantCase,      value: UPPER_CASE }
  - { key: readability-identifier-naming.GlobalConstantCase,    value: lower_case }
  - { key: readability-identifier-naming.GlobalConstantPrefix,  value: k_         }
- - { key: readability-identifier-naming.MemberConstantCase,    value: lower_case }
- - { key: readability-identifier-naming.MemberConstantPrefix,  value: k_         }
+ - { key: readability-identifier-naming.ConstantMemberCase,    value: lower_case }
+ - { key: readability-identifier-naming.ConstantMemberPrefix,  value: k_         }
+ - { key: readability-identifier-naming.ConstantMemberSuffix,  value: _          }
  - { key: readability-identifier-naming.StaticConstantCase,    value: lower_case }
  - { key: readability-identifier-naming.StaticConstantPrefix,  value: k_         }
 
- - { key: bugprone-unused-return-value.CheckedFunctions, value:   '^.*$' }
+ - { key: bugprone-unused-return-value.CheckedFunctions,   value: '^.*$' }
  - { key: bugprone-unused-return-value.CheckedReturnTypes, value: '^.*$' }
- - { key: bugprone-unused-return-value.AllowCastToVoid,    value:  true}
+ - { key: bugprone-unused-return-value.AllowCastToVoid,    value:  true  }
