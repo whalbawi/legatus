@@ -4,9 +4,11 @@
 #include <sys/event.h>
 
 #include <cerrno>
+#include <cstddef>
 #include <cstdint>
 #include <cstdio>
 
+#include <array>
 #include <stdexcept>
 
 #include "axle/status.h"
@@ -162,38 +164,42 @@ Status<None, int> EventLoop::remove_timer(uint64_t id) {
 }
 
 void EventLoop::run() {
-    struct kevent ev{};
+
+    std::array<struct kevent, k_max_event_cnt> evs{};
 
     while (!done_) {
-        const int ret = kevent(kq_, nullptr, 0, &ev, 1, nullptr);
+        const int ret = kevent(kq_, nullptr, 0, evs.data(), evs.size(), nullptr);
         if (ret == -1) {
             perror("failed to wait for events");
             continue;
         }
 
-        switch (ev.filter) {
-        case EVFILT_USER: {
-            handle_shutdown(ev.ident);
-            break;
-        }
+        for (int i = 0; i < ret; ++i) {
+            const struct kevent& ev = evs.at(i);
+            switch (ev.filter) {
+            case EVFILT_USER: {
+                handle_shutdown(ev.ident);
+                break;
+            }
 
-        case EVFILT_TIMER: {
-            handle_timer(ev.ident, ev.flags, ev.data);
-            break;
-        }
+            case EVFILT_TIMER: {
+                handle_timer(ev.ident, ev.flags, ev.data);
+                break;
+            }
 
-        case EVFILT_READ: {
-            handle_fd_read(ev.ident, ev.flags, ev.fflags, ev.data);
-            break;
-        }
+            case EVFILT_READ: {
+                handle_fd_read(ev.ident, ev.flags, ev.fflags, ev.data);
+                break;
+            }
 
-        case EVFILT_WRITE: {
-            handle_fd_write(ev.ident, ev.flags, ev.fflags, ev.data);
-            break;
-        }
+            case EVFILT_WRITE: {
+                handle_fd_write(ev.ident, ev.flags, ev.fflags, ev.data);
+                break;
+            }
 
-        default:
-            perror("unknown event type");
+            default:
+                perror("unknown event type");
+            }
         }
     }
 }

@@ -72,7 +72,7 @@ Status<None, int> Socket::set_non_blocking() const {
     return Status<None, int>::make_ok();
 }
 
-Status<None, int> Socket::send_all(std::span<uint8_t> buf) const {
+Status<None, int> Socket::send_all(std::span<const uint8_t> buf) const {
     while (!buf.empty()) {
         // NOLINTNEXTLINE(misc-include-cleaner) -- for ssize_t
         const ssize_t len = write(fd_, buf.data(), buf.size());

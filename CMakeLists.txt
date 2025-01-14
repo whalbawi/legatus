@@ -10,6 +10,7 @@ enable_testing()
 set(AXLE_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(AXLE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(AXLE_TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)
+set(AXLE_EXAMPLES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/examples)
 
 set(AXLE_THIRD_PARTY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
 set(AXLE_GOOGLETEST_DIR ${AXLE_THIRD_PARTY_DIR}/googletest)
@@ -96,6 +97,9 @@ target_include_directories(axle-tests PRIVATE ${AXLE_SRC_DIR})
 target_link_libraries(axle-tests axle-lib gtest_main)
 
 add_test(unit-tests axle-tests)
+
+add_executable(echo_server ${AXLE_EXAMPLES_DIR}/echo_server/main.cpp)
+target_link_libraries(echo_server axle-lib)
 
 file(GLOB_RECURSE HDR_FILES "${AXLE_SRC_DIR}/*.h" "${AXLE_INCLUDE_DIR}/*.h")
 add_custom_target(lint
