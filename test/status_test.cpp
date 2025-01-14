@@ -1,4 +1,4 @@
-#include "legatus/status.h"
+#include "axle/status.h"
 
 #include <cstdint>
 
@@ -9,7 +9,7 @@
 
 #include "gtest/gtest.h"
 
-namespace legatus {
+namespace axle {
 
 TEST(StatusTest, Ok) {
     Status status = Status<int, int>::make_ok(-2);
@@ -82,4 +82,4 @@ TEST(StatusTest, NoneErr) {
     ASSERT_FALSE(status.is_ok());
 }
 
-} // namespace legatus
+} // namespace axle

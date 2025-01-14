@@ -5,9 +5,9 @@
 #include <functional>
 #include <unordered_map>
 
-#include "legatus/status.h"
+#include "axle/status.h"
 
-namespace legatus::io {
+namespace axle {
 
 using TimerEventCb = std::function<void(uint64_t, Status<None, int64_t>)>;
 using FdEventIOCb = std::function<void(uint64_t, Status<int64_t, uint32_t>)>;
@@ -58,4 +58,4 @@ class EventLoop {
     void do_shutdown();
 };
 
-} // namespace legatus::io
+} // namespace axle

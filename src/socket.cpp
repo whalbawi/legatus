@@ -1,4 +1,4 @@
-#include "legatus/io/socket.h"
+#include "axle/socket.h"
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -15,7 +15,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "legatus/status.h"
+#include "axle/status.h"
 
 namespace {
 
@@ -36,7 +36,7 @@ struct sockaddr* endpoint_to_sockaddr(const std::string& address,
 
 } // namespace
 
-namespace legatus::io {
+namespace axle {
 
 Socket::Socket() : fd_(socket(AF_INET, SOCK_STREAM, 0)) {
     if (fd_ == -1) {
@@ -164,4 +164,4 @@ Status<Socket, int> ServerSocket::accept() const {
     return Status<Socket, int>::make_ok(Socket(peer_fd));
 }
 
-} // namespace legatus::io
+} // namespace axle

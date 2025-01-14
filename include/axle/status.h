@@ -5,7 +5,7 @@
 #include <utility>
 #include <variant>
 
-namespace legatus {
+namespace axle {
 
 enum class None : uint8_t {};
 
@@ -89,4 +89,4 @@ E Status<T, E>::err() {
     return std::move(std::get<1>(state_));
 }
 
-} // namespace legatus
+} // namespace axle
