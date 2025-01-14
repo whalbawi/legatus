@@ -21,7 +21,7 @@ class Socket {
 
     Status<None, int> set_non_blocking() const;
 
-    Status<None, int> send_all(std::span<uint8_t> buf_view) const;
+    Status<None, int> send_all(std::span<const uint8_t> buf_view) const;
     Status<std::span<uint8_t>, int> recv_some(std::span<uint8_t> buf_view) const;
 
     Status<None, int> close();

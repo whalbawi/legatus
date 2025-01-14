@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 
 #include <functional>
@@ -42,6 +43,7 @@ class EventLoop {
 
   private:
     static constexpr uint64_t k_shutdown_event_id = 19;
+    static constexpr size_t k_max_event_cnt = 64;
 
     int kq_;
     bool done_ = false;
