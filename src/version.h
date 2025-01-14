@@ -2,10 +2,10 @@
 
 #include <string>
 
-namespace legatus {
+namespace axle {
 
 std::string version();
 
 std::string git_commit_hash();
 
-} // namespace legatus
+} // namespace axle

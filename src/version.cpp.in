@@ -2,23 +2,23 @@
 
 #include <string>
 
-namespace legatus {
+namespace axle {
 
 namespace {
 
 // NOLINTBEGIN(cppcoreguidelines-macro-usage)
-#cmakedefine LEGATUS_PROJECT_VERSION "@LEGATUS_PROJECT_VERSION@"
-#cmakedefine LEGATUS_GIT_COMMIT_HASH "@LEGATUS_GIT_COMMIT_HASH@"
+#cmakedefine AXLE_PROJECT_VERSION "@AXLE_PROJECT_VERSION@"
+#cmakedefine AXLE_GIT_COMMIT_HASH "@AXLE_GIT_COMMIT_HASH@"
 // NOLINTEND(cppcoreguidelines-macro-usage)
 
 } // namespace
 
 std::string version() {
-    return LEGATUS_PROJECT_VERSION;
+    return AXLE_PROJECT_VERSION;
 }
 
 std::string git_commit_hash() {
-    return LEGATUS_GIT_COMMIT_HASH;
+    return AXLE_GIT_COMMIT_HASH;
 }
 
-} // namespace legatus
+} // namespace axle

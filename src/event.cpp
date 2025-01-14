@@ -1,4 +1,4 @@
-#include "legatus/io/event.h"
+#include "axle/event.h"
 
 #include <unistd.h>
 #include <sys/event.h>
@@ -9,9 +9,9 @@
 
 #include <stdexcept>
 
-#include "legatus/status.h"
+#include "axle/status.h"
 
-namespace legatus::io {
+namespace axle {
 
 EventLoop::EventLoop() : kq_(kqueue()) {
     if (kq_ == -1) {
@@ -271,4 +271,4 @@ void EventLoop::handle_fd_write(const uint64_t fd,
     }
 }
 
-} // namespace legatus::io
+} // namespace axle

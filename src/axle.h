@@ -2,9 +2,9 @@
 
 #include <string>
 
-namespace legatus {
+namespace axle {
 
-class Legatus {
+class Axle {
   public:
     static std::string get_version();
 
@@ -15,4 +15,4 @@ class Legatus {
     int result_;
 };
 
-} // namespace legatus
+} // namespace axle

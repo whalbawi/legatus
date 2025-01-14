@@ -1,6 +1,6 @@
 // NOLINTBEGIN(readability-function-cognitive-complexity)
 
-#include "legatus/io/event.h"
+#include "axle/event.h"
 
 #include <cerrno>
 #include <cstdint>
@@ -14,15 +14,15 @@
 #include <thread>
 #include <utility>
 
-#include "legatus/io/socket.h"
-#include "legatus/status.h"
+#include "axle/socket.h"
+#include "axle/status.h"
 
 #include "gtest/gtest.h"
 
-namespace legatus::io {
+namespace axle {
 
 TEST(EventLoopTest, TimerOneshot) {
-    legatus::io::EventLoop ev_loop;
+    EventLoop ev_loop;
     int timer_id = 1;
     const uint64_t delay = 5e8;
     bool called = false;
@@ -46,7 +46,7 @@ TEST(EventLoopTest, TimerOneshot) {
 }
 
 TEST(EventLoopTest, TimerPeriodic) {
-    legatus::io::EventLoop ev_loop;
+    EventLoop ev_loop;
     int timer_id = 1;
     const uint64_t delay = 5e8;
     int counter = 0;
@@ -73,7 +73,7 @@ TEST(EventLoopTest, TimerPeriodic) {
 }
 
 TEST(EventLoopTest, TimerUpdate) {
-    legatus::io::EventLoop ev_loop;
+    EventLoop ev_loop;
     int timer_id = 1;
     const uint64_t delay = 5e8;
     int counter = 0;
@@ -337,5 +337,5 @@ TEST(EventLoopTest, Server) {
     }
 }
 
-} // namespace legatus::io
+} // namespace axle
 // NOLINTEND(readability-function-cognitive-complexity)

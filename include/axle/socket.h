@@ -5,9 +5,9 @@
 #include <span>
 #include <string>
 
-#include "legatus/status.h"
+#include "axle/status.h"
 
-namespace legatus::io {
+namespace axle {
 
 class Socket {
   public:
@@ -47,4 +47,4 @@ class ServerSocket : public Socket {
     Status<Socket, int> accept() const;
 };
 
-} // namespace legatus::io
+} // namespace axle

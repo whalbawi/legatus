@@ -1,4 +1,4 @@
-name: Legatus CI
+name: Axle CI
 
 on:
   push:
