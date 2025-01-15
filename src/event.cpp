@@ -170,7 +170,9 @@ void EventLoop::run() {
     while (!done_) {
         const int ret = kevent(kq_, nullptr, 0, evs.data(), evs.size(), nullptr);
         if (ret == -1) {
-            perror("failed to wait for events");
+            if (errno != EINTR) {
+                perror("failed to wait for events");
+            }
             continue;
         }
 
@@ -238,10 +240,10 @@ void EventLoop::handle_timer(const uint64_t id, const uint16_t flags, const uint
     }
 }
 
-void EventLoop::handle_fd_read(const uint64_t fd,
-                               const uint16_t flags,
-                               const uint32_t fflags,
-                               const int64_t data) {
+inline void EventLoop::handle_fd_read(const uint64_t fd,
+                                      const uint16_t flags,
+                                      const uint32_t fflags,
+                                      const int64_t data) {
     if (fd_read_.contains(fd)) {
         const FdEventIOCb& cb = fd_read_[fd];
         if ((flags & EV_ERROR) != 0) {
@@ -257,10 +259,10 @@ void EventLoop::handle_fd_read(const uint64_t fd,
     }
 }
 
-void EventLoop::handle_fd_write(const uint64_t fd,
-                                const uint16_t flags,
-                                const uint32_t fflags,
-                                const int64_t data) {
+inline void EventLoop::handle_fd_write(const uint64_t fd,
+                                       const uint16_t flags,
+                                       const uint32_t fflags,
+                                       const int64_t data) {
     if (!fd_write_.contains(fd)) {
         return;
     }

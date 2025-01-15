@@ -111,21 +111,26 @@ class TcpServer {
                 session->post_send(buf.size());
             });
 
-        (void)event_loop_->register_fd_eof(socket->get_fd(), [socket, session, this]() {
-            session->end();
+        event_loop_
+            ->register_fd_eof(socket->get_fd(),
+                              [socket, session, this]() {
+                                  session->end();
+                                  const int fd = socket->get_fd();
 
-            if (event_loop_->remove_fd_write(socket->get_fd()).is_err()) {
-                log("failed to remove fd write filter\n");
-            }
+                                  event_loop_->remove_fd_write(fd).if_err([](int err) {
+                                      log("failed to remove fd write filter: {}\n", err);
+                                  });
 
-            if (event_loop_->remove_fd_read(socket->get_fd()).is_err()) {
-                log("failed to remove fd read filter\n");
-            }
+                                  event_loop_->remove_fd_read(fd).if_err([](int err) {
+                                      log("failed to remove fd read filter: {}\n", err);
+                                  });
 
-            if (event_loop_->remove_fd_eof(socket->get_fd()).is_err()) {
-                log("failed to remove fd eof filter\n");
-            }
-        });
+                                  socket->close().if_err(
+                                      [](int err) { log("failed to close socket: {}\n", err); });
+                                  event_loop_->remove_fd_eof(fd).if_err(
+                                      [] { log("failed to remove fd eof filter\n"); });
+                              })
+            .if_err([] { log("failed to remove EOF fd filter"); });
     }
 
     bool running() {

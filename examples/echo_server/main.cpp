@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <array>
+#include <csignal>
 #include <exception>
 #include <iostream>
 #include <iterator>
@@ -71,6 +72,12 @@ class EchoServer : public axle::TcpServer<Session> {
     }
 };
 
+static const std::shared_ptr<axle::EventLoop> event_loop = std::make_shared<axle::EventLoop>();
+static void sig_handler(int signum) {
+    std::cout << "\nInterrupt signal (" << signum << ") received.\n";
+    event_loop->shutdown();
+}
+
 int main(int argc, char** argv) {
     (void)argc;
     (void)argv;
@@ -78,9 +85,8 @@ int main(int argc, char** argv) {
     constexpr int port = 8081;
 
     try {
-        const std::shared_ptr<axle::EventLoop> event_loop = std::make_shared<axle::EventLoop>();
         EchoServer server{event_loop, port};
-
+        signal(SIGINT, sig_handler);
         server.start();
         event_loop->run();
     } catch (const std::exception& e) {

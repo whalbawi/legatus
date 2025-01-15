@@ -2,6 +2,7 @@
 
 #include <cstdint>
 
+#include <functional>
 #include <utility>
 #include <variant>
 
@@ -31,6 +32,16 @@ class Status {
     T ok();
 
     E err();
+
+    void if_ok(std::function<void(T)> cb);
+
+    void if_err(std::function<void(E)> cb);
+
+    void if_ok(std::function<void()> cb)
+        requires std::is_same_v<T, None>;
+
+    void if_err(std::function<void()> cb)
+        requires std::is_same_v<E, None>;
 
   private:
     Status() = delete;
@@ -87,6 +98,46 @@ T Status<T, E>::ok() {
 template <typename T, typename E>
 E Status<T, E>::err() {
     return std::move(std::get<1>(state_));
+}
+
+template <typename T, typename E>
+void Status<T, E>::if_ok(std::function<void(T)> cb) {
+    if (is_err()) {
+        return;
+    }
+
+    cb(ok());
+}
+
+template <typename T, typename E>
+void Status<T, E>::if_err(std::function<void(E)> cb) {
+    if (is_ok()) {
+        return;
+    }
+
+    cb(err());
+}
+
+template <typename T, typename E>
+void Status<T, E>::if_ok(std::function<void()> cb)
+    requires std::is_same_v<T, None>
+{
+    if (is_err()) {
+        return;
+    }
+
+    cb();
+}
+
+template <typename T, typename E>
+void Status<T, E>::if_err(std::function<void()> cb)
+    requires std::is_same_v<E, None>
+{
+    if (is_ok()) {
+        return;
+    }
+
+    cb();
 }
 
 } // namespace axle
